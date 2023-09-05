@@ -5,6 +5,7 @@ const isDev = require("electron-is-dev");
 
 let mainWindow = null;
 let captureWindow = null;
+let tray = null;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({ width: 900, height: 680 });
@@ -26,6 +27,7 @@ const createWindow = () => {
   });
 };
 
+// Create capture window to allow screenshotting a portion of the screen
 const createCaptureWindow = () => {
   // Require screen module when app is ready
   const { screen } = require("electron");
@@ -39,7 +41,7 @@ const createCaptureWindow = () => {
     width, 
     height, 
     // transparent: true, // SET TO TRUE LATER?
-    // frame: false, 
+    frame: false, 
     // opacity: 0.5,
     // alwaysOnTop: true, // SET TO TRUE LATER
     // skipTaskbar: true, // SET TO TRUE LATER
@@ -59,13 +61,35 @@ ipcMain.on('capture-mouse-move', (event, arg) => {
   console.log(point);
 });
 
-app.on("ready", createWindow);
+// Hide capture window on escape pressed when focused
+ipcMain.on('capture-escape-pressed', (event, arg) => {
+  captureWindow.hide();
+});
 
-let tray = null;
+app.on("ready", () => {
+
+});
+
+
 app.whenReady().then(() => {
   tray = new Tray('./public/favicon.ico');
   
   const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Capture Image (Ctrl+Shift+X)',
+      click: () => {
+        captureWindow === null ? createCaptureWindow() : captureWindow.show();
+      }
+    },
+    {
+      label: 'Show',
+      click: () => {
+        mainWindow === null ? createWindow() : mainWindow.show();
+      }
+    },
+    {
+      type: 'separator'
+    },
     {
       label: 'Quit',
       click: () => {
@@ -77,13 +101,14 @@ app.whenReady().then(() => {
 
   tray.setToolTip('Color Picker');
 
+  // Show capture window on tray icon click
   tray.on('click', () => {
-    mainWindow.show();
+    captureWindow === null ? createCaptureWindow() : captureWindow.show();
   });
 
   // Register a 'CommandOrControl+Shift+X' shortcut listener for screen capture
   const ret = globalShortcut.register('CommandOrControl+Shift+X', () => {
-    console.log("CommandOrControl+Shift+X is pressed");
+    captureWindow === null ? createCaptureWindow() : captureWindow.show();
   });
 
   if(!ret) {
@@ -91,8 +116,6 @@ app.whenReady().then(() => {
   }
 
   // console.log(globalShortcut.isRegistered('CommandOrControl+Shift+X'));
-
-  createCaptureWindow();
 });
 
 app.on("window-all-closed", () => {
