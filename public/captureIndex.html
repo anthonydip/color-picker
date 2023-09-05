@@ -3,21 +3,24 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'">
     <title>Color Picker</title>
     <style>
       html, body {
         height: 100%;
         margin: 0;
         cursor: crosshair;
-      }
-
-      #wrapper {
-        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: hidden;
       }
     </style>
   </head>
   <body>
-    <div id="wrapper"></div>
+    <canvas id="canvas">
+    </canvas>
+    <script src="draw.js"></script>
+    <script>
+      initDraw(document.getElementById('canvas'));
+    </script>
   </body>
 </html>

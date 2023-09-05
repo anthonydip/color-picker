@@ -18,9 +18,11 @@ const createCaptureWindow = () => {
     height, 
     resizable: false,
     frame: false, 
-    opacity: 0.01,
+    // opacity: 0.01,
     alwaysOnTop: true, // SET TO TRUE LATER
     skipTaskbar: true, // SET TO TRUE LATER
+    movable: false,
+    fullscreen: true,
     transparent: true,
     webPreferences: { 
       preload: path.join(__dirname, "capturePreload.js"),

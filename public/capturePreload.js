@@ -21,3 +21,7 @@ document.addEventListener('mousedown', (event) => {
 document.addEventListener('mouseup', (event) => {
   ipcRenderer.send('capture-mouse-up', "mouse up");
 });
+
+document.addEventListener('mouseleave', (event) => {
+  ipcRenderer.send('capture-mouse-leave', "mouse left");
+});

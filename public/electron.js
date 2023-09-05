@@ -111,6 +111,13 @@ ipcMain.on('capture-mouse-up', (event, arg) => {
   console.log("CAPTURE FROM: ", startCapture, " TO: ", endCapture);
 });
 
+// might not be needed?
+ipcMain.on('capture-mouse-leave', (event, arg) => {
+  // console.log("mouse left, closing");
+  // captureWindow.close();
+  // captureWindow = null;
+});
+
 app.on("window-all-closed", () => {
   // if(process.platform !== "darwin") {
   //   app.quit();
