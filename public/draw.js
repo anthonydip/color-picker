@@ -47,6 +47,9 @@ const initDraw = (canvas) => {
   }
 
   const handleStopDraw = (event) => {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     isDrawing = false;
   };
 

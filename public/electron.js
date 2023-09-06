@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { app, Menu, Tray, BrowserWindow, globalShortcut, ipcMain, ipcRenderer, screen } = require("electron");
+const { app, Menu, Tray, BrowserWindow, globalShortcut, ipcMain, desktopCapturer, screen } = require("electron");
 const { createCaptureWindow } = require("./capture.js");
 const path = require("path");
 const isDev = require("electron-is-dev");
@@ -9,7 +9,14 @@ let captureWindow = null;
 let tray = null;
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({ width: 900, height: 680 });
+  mainWindow = new BrowserWindow({ 
+    width: 900, 
+    height: 680,
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    }
+  });
   mainWindow.loadURL(
     isDev
       ? "http://localhost:3000"
@@ -18,7 +25,9 @@ const createWindow = () => {
 
   mainWindow.on("close", (event) => {
     if(app.quitting) {
+      ipcMain.removeAllListeners();
       mainWindow = null;
+      captureWindow = null;
     }
     else {
       event.preventDefault();
@@ -28,7 +37,7 @@ const createWindow = () => {
 };
 
 app.on("ready", () => {
-
+  createWindow();
 });
 
 
@@ -47,7 +56,7 @@ app.whenReady().then(() => {
     {
       label: 'Show',
       click: () => {
-        mainWindow === null ? createWindow() : mainWindow.show();
+        mainWindow.show();
       }
     },
     {
@@ -56,7 +65,7 @@ app.whenReady().then(() => {
     {
       label: 'Quit',
       click: () => {
-        app.quit()
+        app.quit();
       }
     }
   ]);
@@ -91,7 +100,6 @@ ipcMain.on('capture-escape-pressed', (event, arg) => {
   captureWindow = null;
 });
 
-
 // Capture mouse movement in capture window
 ipcMain.on('capture-mouse-move', (event, arg) => {
   const point = screen.getCursorScreenPoint();
@@ -108,6 +116,16 @@ ipcMain.on('capture-mouse-down', (event, arg) => {
 ipcMain.on('capture-mouse-up', (event, arg) => {
   endCapture = screen.getCursorScreenPoint();
 
+  desktopCapturer
+    .getSources({ 
+      types: ["screen"],
+      thumbnailSize: { width: 1920, height: 1080 }
+    })
+    .then((sources) => {
+      let image = sources[0].thumbnail.toDataURL();
+      mainWindow.webContents.send('capture-complete', image);
+    });
+
   console.log("CAPTURE FROM: ", startCapture, " TO: ", endCapture);
 });
 
@@ -119,9 +137,7 @@ ipcMain.on('capture-mouse-leave', (event, arg) => {
 });
 
 app.on("window-all-closed", () => {
-  // if(process.platform !== "darwin") {
-  //   app.quit();
-  // }
+  // app.quit();
 });
 
 app.on("activate", () => {

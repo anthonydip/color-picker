@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -17,7 +17,9 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
+      <img width="100%" alt="Captured Image" src="" id="capture-image" />
+      <p id="test">test</p>
     </div>
   );
 }
