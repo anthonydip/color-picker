@@ -26,7 +26,7 @@ const createCaptureWindow = () => {
     transparent: true,
     webPreferences: { 
       preload: path.join(__dirname, "capturePreload.js"),
-      nodeIntegration: true 
+      nodeIntegration: true,
     } 
   });
 

@@ -14,6 +14,8 @@ const createWindow = () => {
     height: 680,
     show: false,
     webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: true,
       preload: path.join(__dirname, "preload.js"),
     }
   });
@@ -116,6 +118,15 @@ ipcMain.on('capture-mouse-down', (event, arg) => {
 ipcMain.on('capture-mouse-up', (event, arg) => {
   endCapture = screen.getCursorScreenPoint();
 
+  const captureBounds = {
+    startCapture: startCapture,
+    endCapture: endCapture,
+    captureWidth: endCapture.x - startCapture.x,
+    captureHeight: endCapture.y - startCapture.y
+  };
+
+  console.log("Capturing from ", startCapture, " to ", endCapture);
+
   desktopCapturer
     .getSources({ 
       types: ["screen"],
@@ -124,10 +135,17 @@ ipcMain.on('capture-mouse-up', (event, arg) => {
     .then((sources) => {
       let image = sources[0].thumbnail.toDataURL();
       mainWindow.webContents.send('capture-complete', image);
+      mainWindow.webContents.send('capture-boundaries', captureBounds);
     });
 
-  console.log("CAPTURE FROM: ", startCapture, " TO: ", endCapture);
+  // Close the capture window
+  captureWindow.close();
+  captureWindow = null;
 });
+
+ipcMain.on('test-here', (event, arg) => {
+  console.log(arg);
+})
 
 // might not be needed?
 ipcMain.on('capture-mouse-leave', (event, arg) => {

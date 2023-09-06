@@ -1,7 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect } from 'react';
 
 function App() {
+
+  // Receive capture boundaries from main process
+  window.ipcRender.receive('capture-boundaries', (data) => {
+    console.log("boundaries: ", data);
+  })
+
   return (
     <div className="App">
       {/* <header className="App-header">
