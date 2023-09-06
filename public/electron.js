@@ -1,5 +1,6 @@
 const electron = require("electron");
 const { app, Menu, Tray, BrowserWindow, globalShortcut, ipcMain, desktopCapturer, screen } = require("electron");
+const Jimp = require("jimp");
 const { createCaptureWindow } = require("./capture.js");
 const path = require("path");
 const isDev = require("electron-is-dev");
@@ -118,34 +119,41 @@ ipcMain.on('capture-mouse-down', (event, arg) => {
 ipcMain.on('capture-mouse-up', (event, arg) => {
   endCapture = screen.getCursorScreenPoint();
 
-  const captureBounds = {
-    startCapture: startCapture,
-    endCapture: endCapture,
-    captureWidth: endCapture.x - startCapture.x,
-    captureHeight: endCapture.y - startCapture.y
-  };
-
-  console.log("Capturing from ", startCapture, " to ", endCapture);
-
   desktopCapturer
     .getSources({ 
       types: ["screen"],
       thumbnailSize: { width: 1920, height: 1080 }
     })
     .then((sources) => {
-      let image = sources[0].thumbnail.toDataURL();
-      mainWindow.webContents.send('capture-complete', image);
-      mainWindow.webContents.send('capture-boundaries', captureBounds);
+      let imageData = sources[0].thumbnail.toDataURL();
+
+      let encodedImageBuffer = new Buffer.from(imageData.replace(/^data:image\/(png|gif|jpeg);base64,/,''), 'base64');
+
+      Jimp.read(encodedImageBuffer, (err, image) => {
+        if (err) throw err;
+
+        console.log(image.bitmap.width, image.bitmap.height);
+
+        const captureWidth = endCapture.x - startCapture.x;
+        const captureHeight = endCapture.y - startCapture.y;
+
+        image.crop(startCapture.x, startCapture.y, captureWidth, captureHeight)
+        .getBase64('image/jpeg', (err, base64data) => {
+          if (err) throw err;
+
+          mainWindow.webContents.send('capture-image', base64data);
+        });
+
+      });
+
+      // mainWindow.webContents.send('capture-image', image);
+      // mainWindow.webContents.send('capture-boundaries', captureBounds);
     });
 
   // Close the capture window
   captureWindow.close();
   captureWindow = null;
 });
-
-ipcMain.on('test-here', (event, arg) => {
-  console.log(arg);
-})
 
 // might not be needed?
 ipcMain.on('capture-mouse-leave', (event, arg) => {

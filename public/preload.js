@@ -1,22 +1,21 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
-window.addEventListener("DOMContentLoaded", () => {
-  ipcRenderer.on("capture-complete", (event, data) => {
-    console.log("CAPTURE COMPLETED!");
-    document.getElementById("capture-image").src = data;
-    document.getElementById("test").innerText = "hello";
-  });
-});
+// window.addEventListener("DOMContentLoaded", () => {
+//   ipcRenderer.on("capture-complete", (event, data) => {
+//     console.log("CAPTURE COMPLETED!");
+//     document.getElementById("capture-image").src = data;
+//     document.getElementById("test").innerText = "hello";
+//   });
+// });
 
 // White-listed channels
 const ipc = {
   'render': {
     // From render to main
-    'send': [
-      'test-here'
-    ],
+    'send': [],
     // From main to render
     'receive': [
+      'capture-image',
       'capture-boundaries'
     ],
     // From render to main and back to render

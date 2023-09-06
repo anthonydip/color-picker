@@ -1,34 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
-function App() {
+const App = () => {
+  const [image, setImage] = useState(null);
+  const [boundaries, setBoundaries] = useState(null);
 
-  // Receive capture boundaries from main process
-  window.ipcRender.receive('capture-boundaries', (data) => {
-    console.log("boundaries: ", data);
-  })
+  // Set up listeners from the main process only on page-load
+  useEffect(() => {
+    // Receive capture image from main process
+    window.ipcRender.receive('capture-image', (image) => {
+      // console.log("image: " + image);
+      setImage(image);
+    });
+
+    // Receive capture boundaries from main process
+    window.ipcRender.receive('capture-boundaries', (data) => {
+      // console.log("boundaries: ", data);
+      setBoundaries(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log("image has updated");
+    // if (image && boundaries) {
+    //   cropImage(image, boundaries);
+    // };
+  }, [image, boundaries]);
 
   return (
-    <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
-      <img width="100%" alt="Captured Image" src="" id="capture-image" />
+    <div>
+      {image && (
+        <img id="capture-image" src={image} alt="Captured screen" />
+      )}
       <p id="test">test</p>
     </div>
   );
-}
+};
 
 export default App;
