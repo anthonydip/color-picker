@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
+import Titlebar from './components/Titlebar';
 
 const App = () => {
   const [image, setImage] = useState(null);
   const [boundaries, setBoundaries] = useState(null);
 
-  // Set up listeners from the main process only on page-load
   useEffect(() => {
     // Receive capture image from main process
     window.ipcRender.receive('capture-image', (image) => {
@@ -27,12 +28,21 @@ const App = () => {
   }, [image, boundaries]);
 
   return (
-    <div>
+    <main>
+      <Helmet>
+        <style>
+          {`
+            body {
+              background-color: #1e293b !important;
+            }
+          `}
+        </style>
+      </Helmet>
+      <Titlebar />
       {image && (
         <img id="capture-image" src={image} alt="Captured screen" />
       )}
-      <p id="test">test</p>
-    </div>
+    </main>
   );
 };
 

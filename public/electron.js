@@ -1,5 +1,5 @@
 const electron = require("electron");
-const { app, Menu, Tray, BrowserWindow, globalShortcut, ipcMain, desktopCapturer, screen } = require("electron");
+const { app, Menu, Tray, BrowserWindow, globalShortcut, ipcMain, desktopCapturer, screen, nativeImage, clipboard } = require("electron");
 const Jimp = require("jimp");
 const { createCaptureWindow } = require("./capture.js");
 const path = require("path");
@@ -14,6 +14,10 @@ const createWindow = () => {
     width: 900, 
     height: 680,
     show: false,
+    // frame: false,
+    // autoHideMenuBar: true,
+    titleBarStyle: 'hidden',
+    // titleBarOverlay: 'true',
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: true,
@@ -31,11 +35,23 @@ const createWindow = () => {
       ipcMain.removeAllListeners();
       mainWindow = null;
       captureWindow = null;
-    }
-    else {
+    } else {
       event.preventDefault();
       mainWindow.hide();
     }
+  });
+
+  const titleBarHack =
+    'var div = document.createElement("div");' +
+    'div.style.position = "absolute";' +
+    'div.style.top = 0;' +
+    'div.style.height = "23px";' +
+    'div.style.width = "100%";' +
+    'div.style["-webkit-app-region"] = "drag";' +
+    'document.body.appendChild(div);';
+
+  mainWindow.webContents.on("did-finish-load", () => {
+    mainWindow.webContents.executeJavaScript(titleBarHack);
   });
 };
 
@@ -137,9 +153,16 @@ ipcMain.on('capture-mouse-up', (event, arg) => {
         const captureWidth = endCapture.x - startCapture.x;
         const captureHeight = endCapture.y - startCapture.y;
 
-        image.crop(startCapture.x, startCapture.y, captureWidth, captureHeight)
-        .getBase64('image/jpeg', (err, base64data) => {
+        image.crop(startCapture.x, startCapture.y, captureWidth, captureHeight);
+
+
+        image.getBase64('image/jpeg', (err, base64data) => {
           if (err) throw err;
+
+          // Create nativeImage and copy to clipboard
+          console.log(base64data);
+          const nImage = nativeImage.createFromBuffer(new Buffer.from(base64data.replace(/^data:image\/(png|gif|jpeg);base64,/,''), 'base64'));
+          clipboard.writeImage(nImage);
 
           mainWindow.webContents.send('capture-image', base64data);
         });
