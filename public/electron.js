@@ -41,18 +41,18 @@ const createWindow = () => {
     }
   });
 
-  const titleBarHack =
-    'var div = document.createElement("div");' +
-    'div.style.position = "absolute";' +
-    'div.style.top = 0;' +
-    'div.style.height = "23px";' +
-    'div.style.width = "100%";' +
-    'div.style["-webkit-app-region"] = "drag";' +
-    'document.body.appendChild(div);';
+  // const titleBarHack =
+  //   'var div = document.createElement("div");' +
+  //   'div.style.position = "absolute";' +
+  //   'div.style.top = 0;' +
+  //   'div.style.height = "23px";' +
+  //   'div.style.width = "100%";' +
+  //   'div.style["-webkit-app-region"] = "drag";' +
+  //   'document.body.appendChild(div);';
 
-  mainWindow.webContents.on("did-finish-load", () => {
-    mainWindow.webContents.executeJavaScript(titleBarHack);
-  });
+  // mainWindow.webContents.on("did-finish-load", () => {
+  //   mainWindow.webContents.executeJavaScript(titleBarHack);
+  // });
 };
 
 app.on("ready", () => {
@@ -61,7 +61,8 @@ app.on("ready", () => {
 
 
 app.whenReady().then(() => {
-  tray = new Tray('./public/favicon.ico');
+  const iconPath = path.join(__dirname, 'favicon.ico');
+  tray = new Tray(iconPath);
   
   const contextMenu = Menu.buildFromTemplate([
     {
