@@ -12,7 +12,11 @@ const { contextBridge, ipcRenderer } = require("electron");
 const ipc = {
   'render': {
     // From render to main
-    'send': [],
+    'send': [
+      'main-minimize',
+      'main-maximize',
+      'main-close'
+    ],
     // From main to render
     'receive': [
       'capture-image',

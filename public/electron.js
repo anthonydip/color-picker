@@ -186,6 +186,25 @@ ipcMain.on('capture-mouse-leave', (event, arg) => {
   // captureWindow = null;
 });
 
+// Minimize main window from titlebar
+ipcMain.on('main-minimize', (event, arg) => {
+  console.log("minimize main window!");
+  mainWindow.minimize();
+});
+
+// Maximize main window from titlebar
+ipcMain.on('main-maximize', (event, arg) => {
+  console.log("maximize main window!");
+  if(mainWindow.isMaximized()) mainWindow.unmaximize();
+  else mainWindow.maximize();
+});
+
+// Close/hide main window from titlebar
+ipcMain.on('main-close', (event, arg) => {
+  console.log("close main window!");
+  mainWindow.hide();
+});
+
 app.on("window-all-closed", () => {
   // app.quit();
 });

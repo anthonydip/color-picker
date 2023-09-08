@@ -4,7 +4,18 @@ const Titlebar = () => {
 
   const handleClose = () => {
     console.log("closing");
-  }
+    window.ipcRender.send("main-close", "close");
+  };
+
+  const handleMinimize = () => {
+    console.log("minimizing");
+    window.ipcRender.send("main-minimize", "minimize");
+  };
+
+  const handleMaximize = () => {
+    console.log("maximizing");
+    window.ipcRender.send("main-maximize", "maximize");
+  };
 
   return (
     <div className="flex justify-between items-center bg-slate-900 h-8">
@@ -15,13 +26,13 @@ const Titlebar = () => {
       <div>
         <button
           className="h-8 w-10 hover:bg-slate-600 active:bg-slate-500"
-          onClick={handleClose}
+          onClick={handleMinimize}
         >
           <AiOutlineMinus className="text-slate-400 mx-auto" />
         </button>
         <button
           className="h-8 w-10 hover:bg-slate-600 active:bg-slate-500"
-          onClick={handleClose}
+          onClick={handleMaximize}
         >
           <AiOutlineBorder className="text-slate-400 mx-auto" />
         </button>
