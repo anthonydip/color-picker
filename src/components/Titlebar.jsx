@@ -1,4 +1,5 @@
 import { AiOutlineClose, AiOutlineBorder, AiOutlineMinus } from "react-icons/ai";
+import logo from "../assets/logo.ico";
 
 const Titlebar = () => {
 
@@ -19,8 +20,8 @@ const Titlebar = () => {
 
   return (
     <div className="flex justify-between items-center bg-slate-900 h-8">
-      <div className="h-8 w-[7.5rem]">
-        {/* Icon? */}
+      <div className="flex items-center h-8 w-[7.5rem]">
+        <img src={logo} alt="logo" className="ml-2 h-5 w-5" />
       </div>
       <p className="text-slate-400">Color Picker</p>
       <div>
@@ -37,7 +38,7 @@ const Titlebar = () => {
           <AiOutlineBorder className="text-slate-400 mx-auto" />
         </button>
         <button
-          className="h-8 w-10 hover:bg-red-600 active:bg-red-700 text-slate-400 hover:text-white"
+          className="h-8 w-10 hover:bg-red-600 active:bg-red-800 text-slate-400 hover:text-white active:text-white"
           onClick={handleClose}
         >
           <AiOutlineClose className="mx-auto" />

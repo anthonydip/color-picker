@@ -39,9 +39,17 @@ const App = () => {
         </style>
       </Helmet>
       <Titlebar />
-      {image && (
-        <img id="capture-image" src={image} alt="Captured screen" />
-      )}
+      <div className="w-[95%] mx-auto mt-5">
+        {image && (
+          <img 
+            className="m-w-[50%] mx-auto"
+            id="capture-image"
+            src={image} 
+            alt="Captured screen" 
+          />
+        )}
+      </div>
+      
     </main>
   );
 };

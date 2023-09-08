@@ -13,8 +13,11 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({ 
     width: 900, 
     height: 680,
+    minWidth: 400,
+    minHeight: 200,
     show: false,
-    // frame: false,
+    frame: false,
+    icon: path.join(__dirname, "logo.ico"),
     // autoHideMenuBar: true,
     // titleBarStyle: 'hidden',
     // titleBarOverlay: 'true',
@@ -41,18 +44,18 @@ const createWindow = () => {
     }
   });
 
-  // const titleBarHack =
-  //   'var div = document.createElement("div");' +
-  //   'div.style.position = "absolute";' +
-  //   'div.style.top = 0;' +
-  //   'div.style.height = "33px";' +
-  //   'div.style.width = "100%";' +
-  //   'div.style["-webkit-app-region"] = "drag";' +
-  //   'document.body.appendChild(div);';
+  const titleBarHack =
+    'var div = document.createElement("div");' +
+    'div.style.position = "absolute";' +
+    'div.style.top = 0;' +
+    'div.style.height = "33px";' +
+    'div.style.width = "calc(100% - 120px)";' +
+    'div.style["-webkit-app-region"] = "drag";' +
+    'document.body.appendChild(div);';
 
-  // mainWindow.webContents.on("did-finish-load", () => {
-  //   mainWindow.webContents.executeJavaScript(titleBarHack);
-  // });
+  mainWindow.webContents.on("did-finish-load", () => {
+    mainWindow.webContents.executeJavaScript(titleBarHack);
+  });
 };
 
 app.on("ready", () => {
@@ -61,7 +64,7 @@ app.on("ready", () => {
 
 
 app.whenReady().then(() => {
-  const iconPath = path.join(__dirname, 'favicon.ico');
+  const iconPath = path.join(__dirname, 'logo.ico');
   tray = new Tray(iconPath);
   
   const contextMenu = Menu.buildFromTemplate([
@@ -149,19 +152,20 @@ ipcMain.on('capture-mouse-up', (event, arg) => {
       Jimp.read(encodedImageBuffer, (err, image) => {
         if (err) throw err;
 
-        console.log(image.bitmap.width, image.bitmap.height);
-
         const captureWidth = endCapture.x - startCapture.x;
         const captureHeight = endCapture.y - startCapture.y;
 
-        image.crop(startCapture.x, startCapture.y, captureWidth, captureHeight);
+        // Invalid size arguments
+        if(startCapture.x < 0 || startCapture.y < 0 || endCapture.x < 0 || endCapture.y < 0) {
+          throw err;
+        }
 
+        image.crop(startCapture.x, startCapture.y, captureWidth, captureHeight);
 
         image.getBase64('image/jpeg', (err, base64data) => {
           if (err) throw err;
 
           // Create nativeImage and copy to clipboard
-          console.log(base64data);
           const nImage = nativeImage.createFromBuffer(new Buffer.from(base64data.replace(/^data:image\/(png|gif|jpeg);base64,/,''), 'base64'));
           clipboard.writeImage(nImage);
 
@@ -188,20 +192,17 @@ ipcMain.on('capture-mouse-leave', (event, arg) => {
 
 // Minimize main window from titlebar
 ipcMain.on('main-minimize', (event, arg) => {
-  console.log("minimize main window!");
   mainWindow.minimize();
 });
 
 // Maximize main window from titlebar
 ipcMain.on('main-maximize', (event, arg) => {
-  console.log("maximize main window!");
   if(mainWindow.isMaximized()) mainWindow.unmaximize();
   else mainWindow.maximize();
 });
 
 // Close/hide main window from titlebar
 ipcMain.on('main-close', (event, arg) => {
-  console.log("close main window!");
   mainWindow.hide();
 });
 
