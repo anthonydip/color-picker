@@ -16,7 +16,7 @@ const createWindow = () => {
     show: false,
     // frame: false,
     // autoHideMenuBar: true,
-    titleBarStyle: 'hidden',
+    // titleBarStyle: 'hidden',
     // titleBarOverlay: 'true',
     webPreferences: {
       contextIsolation: true,
@@ -45,7 +45,7 @@ const createWindow = () => {
   //   'var div = document.createElement("div");' +
   //   'div.style.position = "absolute";' +
   //   'div.style.top = 0;' +
-  //   'div.style.height = "23px";' +
+  //   'div.style.height = "33px";' +
   //   'div.style.width = "100%";' +
   //   'div.style["-webkit-app-region"] = "drag";' +
   //   'document.body.appendChild(div);';
