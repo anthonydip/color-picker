@@ -20,7 +20,7 @@ const ipc = {
     // From main to render
     'receive': [
       'capture-image',
-      'capture-boundaries'
+      'capture-dimensions'
     ],
     // From render to main and back to render
     'sendReceive': []

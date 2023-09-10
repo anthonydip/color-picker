@@ -16,7 +16,7 @@ const createWindow = () => {
     minWidth: 400,
     minHeight: 200,
     show: false,
-    frame: false,
+    // frame: false,
     icon: path.join(__dirname, "logo.ico"),
     // autoHideMenuBar: true,
     // titleBarStyle: 'hidden',
@@ -152,15 +152,17 @@ ipcMain.on('capture-mouse-up', (event, arg) => {
       Jimp.read(encodedImageBuffer, (err, image) => {
         if (err) throw err;
 
-        const captureWidth = endCapture.x - startCapture.x;
-        const captureHeight = endCapture.y - startCapture.y;
+        const dimensions = {
+          width: endCapture.x - startCapture.x,
+          height: endCapture.y - startCapture.y
+        }
 
         // Invalid size arguments
-        if(startCapture.x < 0 || startCapture.y < 0 || endCapture.x < 0 || endCapture.y < 0) {
+        if(startCapture.x < 0 || startCapture.y < 0 || dimensions.width < 0 || dimensions.height < 0) {
           throw err;
         }
 
-        image.crop(startCapture.x, startCapture.y, captureWidth, captureHeight);
+        image.crop(startCapture.x, startCapture.y, dimensions.width, dimensions.height);
 
         image.getBase64('image/jpeg', (err, base64data) => {
           if (err) throw err;
@@ -170,6 +172,7 @@ ipcMain.on('capture-mouse-up', (event, arg) => {
           clipboard.writeImage(nImage);
 
           mainWindow.webContents.send('capture-image', base64data);
+          mainWindow.webContents.send('capture-dimensions', dimensions);
         });
 
       });
