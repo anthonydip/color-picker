@@ -19,8 +19,8 @@ const createWindow = () => {
     // frame: false,
     icon: path.join(__dirname, "logo.ico"),
     // autoHideMenuBar: true,
-    // titleBarStyle: 'hidden',
-    // titleBarOverlay: 'true',
+    titleBarStyle: 'hidden',
+    titleBarOverlay: 'true',
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: true,
@@ -42,19 +42,6 @@ const createWindow = () => {
       event.preventDefault();
       mainWindow.hide();
     }
-  });
-
-  const titleBarHack =
-    'var div = document.createElement("div");' +
-    'div.style.position = "absolute";' +
-    'div.style.top = 0;' +
-    'div.style.height = "33px";' +
-    'div.style.width = "calc(100% - 120px)";' +
-    'div.style["-webkit-app-region"] = "drag";' +
-    'document.body.appendChild(div);';
-
-  mainWindow.webContents.on("did-finish-load", () => {
-    mainWindow.webContents.executeJavaScript(titleBarHack);
   });
 };
 

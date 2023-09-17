@@ -19,7 +19,7 @@ const Titlebar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center bg-slate-900 h-8">
+    <div className="titlebar flex justify-between items-center bg-slate-900 h-8">
       <div className="flex items-center h-8 w-[7.5rem]">
         <img src={logo} alt="logo" className="ml-2 h-5 w-5" />
       </div>

@@ -15,12 +15,12 @@ const ipc = {
     'send': [
       'main-minimize',
       'main-maximize',
-      'main-close'
+      'main-close',
     ],
     // From main to render
     'receive': [
       'capture-image',
-      'capture-dimensions'
+      'capture-dimensions',
     ],
     // From render to main and back to render
     'sendReceive': []
