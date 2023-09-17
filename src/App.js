@@ -3,10 +3,11 @@ import { Helmet } from 'react-helmet';
 import Titlebar from './components/Titlebar';
 import ImageView from './components/ImageView';
 import { hexToRGBA } from './utils/hexToRGBA';
+import { IoCopyOutline } from 'react-icons/io5';
 
 const App = () => {
   const [image, setImage] = useState(null);
-  const [dimensions, setDimensions] = useState(null);
+  // const [dimensions, setDimensions] = useState(null);
   const [hoverColor, setHoverColor] = useState("#ffffff");
   const [selectedColor, setSelectedColor] = useState("#ffffff");
 
@@ -17,10 +18,18 @@ const App = () => {
     });
 
     // Receive capture dimensions from main process
-    window.ipcRender.receive('capture-dimensions', (data) => {
-      setDimensions(data);
-    });
+    // window.ipcRender.receive('capture-dimensions', (data) => {
+    //   setDimensions(data);
+    // });
   }, []);
+
+  const copyHexToClipboard = () => {
+    navigator.clipboard.writeText(selectedColor.toUpperCase());
+  };
+
+  const copyRGBToClipboard = () => {
+    navigator.clipboard.writeText(hexToRGBA(selectedColor));
+  };
 
   return (
     <main>
@@ -52,8 +61,9 @@ const App = () => {
                       <div className={`min-w-[40px] w-[40px] h-[40px] rounded-lg transition-colors`} style={{ backgroundColor: hoverColor }} />
 
                       {/* HEX */}
-                      <div className="ml-5 text-white bg-[#2c3b54] min-w-[240px] w-[50%] text-sm rounded-lg p-2 shadow-md">
+                      <div className="flex items-center justify-between ml-5 text-white bg-[#2c3b54] min-w-[240px] w-[50%] text-sm rounded-lg p-2 shadow-md">
                         <span className="truncate">HEX: {selectedColor.toUpperCase()}</span>
+                        <IoCopyOutline onClick={copyHexToClipboard} className="cursor-pointer" size="1.2rem" />
                       </div>
                     </div>
 
@@ -62,8 +72,9 @@ const App = () => {
                       <div className={`min-w-[40px] w-[40px] h-[40px] rounded-lg transition-colors`} style={{ backgroundColor: selectedColor }} />
 
                       {/* RGBA */}
-                      <div className="ml-5 text-white bg-[#2c3b54] min-w-[240px] w-[50%] text-sm rounded-lg p-2 shadow-md">
+                      <div className="flex items-center justify-between ml-5 text-white bg-[#2c3b54] min-w-[240px] w-[50%] text-sm rounded-lg p-2 shadow-md">
                         <span className="truncate">RGB: {hexToRGBA(selectedColor)}</span>
+                        <IoCopyOutline onClick={copyRGBToClipboard} className="cursor-pointer" size="1.2rem" />
                       </div>
                     </div>
 

@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { rgbaToHex } from "../utils/rgbaToHex";
 import { getPixelColor } from "../utils/getPixelColor";
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
 const ImageView = ({ src, hoverColor, setHoverColor, setSelectedColor }) => {
   const [isHovering, setIsHovering] = useState(false);
-  const [color, setColor] = useState("");
 
   const cursorRef = useRef(null);
   const imageRef = useRef(null);
@@ -67,7 +66,7 @@ const ImageView = ({ src, hoverColor, setHoverColor, setSelectedColor }) => {
     setHoverColor(rgbaToHex(rgba));
 
     const offsetY = 20;
-    const offsetX = 20;
+    // const offsetX = 20;
 
     const translateX = event.clientX;
     const translateY = event.clientY - offsetY - imageRef.current.height;
