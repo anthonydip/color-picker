@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import Titlebar from './components/Titlebar';
 import ImageView from './components/ImageView';
+import { hexToRGBA } from './utils/hexToRGBA';
 
 const App = () => {
   const [image, setImage] = useState(null);
@@ -42,27 +43,27 @@ const App = () => {
 
               {/* Color display */}
               <div className="mx-auto flex items-center justify-center">
-                <div className="w-[80%] rounded-md bg-gradient-to-r from-[#ba3a3c] to-[#5378a9] p-[3px] shadow-2xl">
-                  <div className="flex gap-3 flex-col h-full w-full justify-center bg-[#253247] p-2 back">
+                <div className="min-w-[322px] w-[50%] max-w-[430px] rounded-md bg-gradient-to-r from-[#ba3a3c] to-[#5378a9] p-[3px] shadow-2xl">
+                  <div className="flex gap-3 flex-col h-full w-full justify-center bg-[#253247] p-2 pb-4 back">
                     <span className="text-center text-white -mt-1">Colors</span>
 
                     {/* Hover color */}
-                    <div className="flex items-center">
-                      <div className={`w-[40px] h-[40px] rounded-lg transition-colors`} style={{ backgroundColor: hoverColor }} />
+                    <div className="flex items-center mx-auto">
+                      <div className={`min-w-[40px] w-[40px] h-[40px] rounded-lg transition-colors`} style={{ backgroundColor: hoverColor }} />
 
                       {/* HEX */}
-                      <div>
-
+                      <div className="ml-5 text-white bg-[#2c3b54] min-w-[240px] w-[50%] text-sm rounded-lg p-2 shadow-md">
+                        <span className="truncate">HEX: {selectedColor.toUpperCase()}</span>
                       </div>
                     </div>
 
                     {/* Selected color */}
-                    <div>
-                      <div className={`w-[40px] h-[40px] rounded-lg transition-colors`} style={{ backgroundColor: selectedColor }} />
+                    <div className="flex items-center mx-auto">
+                      <div className={`min-w-[40px] w-[40px] h-[40px] rounded-lg transition-colors`} style={{ backgroundColor: selectedColor }} />
 
                       {/* RGBA */}
-                      <div>
-
+                      <div className="ml-5 text-white bg-[#2c3b54] min-w-[240px] w-[50%] text-sm rounded-lg p-2 shadow-md">
+                        <span className="truncate">RGB: {hexToRGBA(selectedColor)}</span>
                       </div>
                     </div>
 
