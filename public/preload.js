@@ -23,7 +23,10 @@ const ipc = {
       'capture-dimensions',
     ],
     // From render to main and back to render
-    'sendReceive': []
+    'sendReceive': [],
+    'removeAllListeners': [
+      'capture-image'
+    ]
   }
 }
 
@@ -72,6 +75,12 @@ contextBridge.exposeInMainWorld(
       let validChannels = ipc.render.sendReceive;
       if (validChannels.includes(channel)) {
         return ipcRenderer.invoke(channel, args);
+      }
+    },
+    removeAllListeners: (channel) => {
+      let validChannels = ipc.render.removeAllListeners;
+      if (validChannels.includes(channel)) {
+        return ipcRenderer.removeAllListeners(channel);
       }
     }
   }

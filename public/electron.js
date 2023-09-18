@@ -19,8 +19,8 @@ const createWindow = () => {
     // frame: false,
     icon: path.join(__dirname, "logo.ico"),
     // autoHideMenuBar: true,
-    titleBarStyle: 'hidden',
-    titleBarOverlay: 'true',
+    // titleBarStyle: 'hidden',
+    // titleBarOverlay: 'true',
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: true,
@@ -110,12 +110,6 @@ ipcMain.on('capture-escape-pressed', (event, arg) => {
   captureWindow = null;
 });
 
-// Capture mouse movement in capture window
-ipcMain.on('capture-mouse-move', (event, arg) => {
-  const point = screen.getCursorScreenPoint();
-  // console.log(point);
-});
-
 // Start capture selection on mouse down in capture window
 ipcMain.on('capture-mouse-down', (event, arg) => {
   // console.log("start capture");
@@ -161,23 +155,12 @@ ipcMain.on('capture-mouse-up', (event, arg) => {
           mainWindow.webContents.send('capture-image', base64data);
           mainWindow.webContents.send('capture-dimensions', dimensions);
         });
-
       });
-
-      // mainWindow.webContents.send('capture-image', image);
-      // mainWindow.webContents.send('capture-boundaries', captureBounds);
     });
 
   // Close the capture window
   captureWindow.close();
   captureWindow = null;
-});
-
-// might not be needed?
-ipcMain.on('capture-mouse-leave', (event, arg) => {
-  // console.log("mouse left, closing");
-  // captureWindow.close();
-  // captureWindow = null;
 });
 
 // Minimize main window from titlebar
@@ -202,12 +185,6 @@ app.on("window-all-closed", () => {
 
 app.on("activate", () => {
   mainWindow.show();
-  // if (mainWindow === null) {
-  //   createWindow();
-  // }
-  // else {
-  //   mainWindow.show();
-  // }
 });
 
 app.on('will-quit', () => {
@@ -216,5 +193,8 @@ app.on('will-quit', () => {
 });
 
 app.on('before-quit', () => {
+  // Remove ipcMain listeners
+  ipcMain.removeAllListeners();
+
   app.quitting = true;
 });

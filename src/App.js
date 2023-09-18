@@ -4,17 +4,26 @@ import Titlebar from './components/Titlebar';
 import ImageView from './components/ImageView';
 import { hexToRGBA } from './utils/hexToRGBA';
 import { IoCopyOutline } from 'react-icons/io5';
+import Alert from './components/Alert';
 
 const App = () => {
   const [image, setImage] = useState(null);
   // const [dimensions, setDimensions] = useState(null);
   const [hoverColor, setHoverColor] = useState("#ffffff");
   const [selectedColor, setSelectedColor] = useState("#ffffff");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertText, setAlertText] = useState("");
+  const [alertTimeout, setAlertTimeout] = useState(null);
 
   useEffect(() => {
     // Receive capture image from main process
     window.ipcRender.receive('capture-image', (image) => {
       setImage(image);
+    });
+
+    // Remove ipcRender listeners when app is exited
+    window.addEventListener("beforeunload", (event) => {
+      window.ipcRender.removeAllListeners('capture-image');
     });
 
     // Receive capture dimensions from main process
@@ -24,11 +33,35 @@ const App = () => {
   }, []);
 
   const copyHexToClipboard = () => {
+    // Check if alert is already opened
+    if(isAlertOpen) {
+      setAlertTimeout(clearTimeout(alertTimeout));
+      setIsAlertOpen(false);
+      setAlertText("");
+    }
+
+    setIsAlertOpen(true);
     navigator.clipboard.writeText(selectedColor.toUpperCase());
+
+    setAlertTimeout(setTimeout(() => {
+      setIsAlertOpen(false);
+    }, 3000));
   };
 
   const copyRGBToClipboard = () => {
+    // Check if alert is already opened
+    if(isAlertOpen) {
+      setAlertTimeout(clearTimeout(alertTimeout));
+      setIsAlertOpen(false);
+      setAlertText("");
+    }
+
+    setIsAlertOpen(true);
     navigator.clipboard.writeText(hexToRGBA(selectedColor));
+
+    setAlertTimeout(setTimeout(() => {
+      setIsAlertOpen(false);
+    }, 3000));
   };
 
   return (
@@ -81,13 +114,11 @@ const App = () => {
                   </div>
                 </div>
               </div>
-              
-              {/* <div className={`w-[100px] h-[100px] transition-colors`} style={{ backgroundColor: hoverColor }} />
-              <div className={`w-[100px] h-[100px] transition-colors`} style={{ backgroundColor: selectedColor }} /> */}
             </>
           )}
       </div>
       
+      <Alert alertText={alertText} isAlertOpen={isAlertOpen} />
     </main>
   );
 };

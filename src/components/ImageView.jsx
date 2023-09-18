@@ -62,7 +62,6 @@ const ImageView = ({ src, hoverColor, setHoverColor, setSelectedColor }) => {
 
     const rgba = getPixelColor(event, canvas, ctx);
 
-    console.log("hex: " + rgbaToHex(rgba));
     setHoverColor(rgbaToHex(rgba));
 
     const offsetY = 20;

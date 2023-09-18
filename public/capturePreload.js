@@ -1,10 +1,5 @@
 const { ipcRenderer } = require("electron");
 
-// Listen for mouse movement in capture window
-document.addEventListener('mousemove', (event) => {
-  ipcRenderer.send('capture-mouse-move', "mouse moved");
-});
-
 // Listen for escape key press in capture window
 document.addEventListener('keydown', (event) => {
   if(event.key === "Escape") {
@@ -20,8 +15,4 @@ document.addEventListener('mousedown', (event) => {
 // Listen for mouse up to end capture selection
 document.addEventListener('mouseup', (event) => {
   ipcRenderer.send('capture-mouse-up', "mouse up");
-});
-
-document.addEventListener('mouseleave', (event) => {
-  ipcRenderer.send('capture-mouse-leave', "mouse left");
 });
