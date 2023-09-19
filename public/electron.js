@@ -1,4 +1,3 @@
-const electron = require("electron");
 const { app, Menu, Tray, BrowserWindow, globalShortcut, ipcMain, desktopCapturer, screen, nativeImage, clipboard } = require("electron");
 const Jimp = require("jimp");
 const { createCaptureWindow } = require("./capture.js");

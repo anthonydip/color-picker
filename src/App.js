@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import Titlebar from './components/Titlebar';
 import ImageView from './components/ImageView';
 import { hexToRGBA } from './utils/hexToRGBA';
@@ -68,15 +67,6 @@ const App = () => {
 
   return (
     <main>
-      <Helmet>
-        <style>
-          {`
-            body {
-              background-color: #1e293b !important;
-            }
-          `}
-        </style>
-      </Helmet>
       <Titlebar />
       <div className="w-[95%] mx-auto mt-5">
           {image && (

@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { rgbaToHex } from "../utils/rgbaToHex";
 import { getPixelColor } from "../utils/getPixelColor";
 
-// https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
 const ImageView = ({ src, hoverColor, setHoverColor, setSelectedColor }) => {
   const [isHovering, setIsHovering] = useState(false);
 
@@ -64,12 +63,12 @@ const ImageView = ({ src, hoverColor, setHoverColor, setSelectedColor }) => {
 
     setHoverColor(rgbaToHex(rgba));
 
-    const offsetY = 20;
-    // const offsetX = 20;
+    // const offsetY = 20;
+    // // const offsetX = 20;
 
-    const translateX = event.clientX;
-    const translateY = event.clientY - offsetY - imageRef.current.height;
-    cursorRef.current.style.transform = `translate3d(${translateX}px, ${translateY}px, 0)`;
+    // const translateX = event.clientX;
+    // const translateY = event.clientY - offsetY - imageRef.current.height;
+    // cursorRef.current.style.transform = `translate3d(${translateX}px, ${translateY}px, 0)`;
   };
 
   return (
@@ -89,10 +88,10 @@ const ImageView = ({ src, hoverColor, setHoverColor, setSelectedColor }) => {
         onLoad={readImageData}
         alt="Captured screen"
       />
-      <div 
+      {/* <div 
         className={`absolute h-[100px] w-[100px] bg-slate-300 z-50 block rounded-full ${isHovering ? "block" : "hidden"}`}
         ref={cursorRef}
-      />
+      /> */}
     </div>
   );
 };

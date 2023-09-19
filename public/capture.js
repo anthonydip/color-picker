@@ -35,7 +35,6 @@ const createCaptureWindow = () => {
   });
 
   captureWindow.loadURL(path.join(__dirname, "captureIndex.html"));
-  // captureWindow.webContents.openDevTools();
 
   return captureWindow;
 }
