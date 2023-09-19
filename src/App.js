@@ -41,6 +41,7 @@ const App = () => {
     }
 
     setIsAlertOpen(true);
+    setAlertText("Copied HEX to clipboard!");
     navigator.clipboard.writeText(selectedColor.toUpperCase());
 
     setAlertTimeout(setTimeout(() => {
@@ -57,6 +58,7 @@ const App = () => {
     }
 
     setIsAlertOpen(true);
+    setAlertText("Copied RGB to clipboard!");
     navigator.clipboard.writeText(hexToRGBA(selectedColor));
 
     setAlertTimeout(setTimeout(() => {

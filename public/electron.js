@@ -32,17 +32,6 @@ const createWindow = () => {
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
-
-  mainWindow.on("close", (event) => {
-    if(app.quitting) {
-      ipcMain.removeAllListeners();
-      mainWindow = null;
-      captureWindow = null;
-    } else {
-      event.preventDefault();
-      mainWindow.hide();
-    }
-  });
 };
 
 app.on("ready", () => {
@@ -66,6 +55,7 @@ app.whenReady().then(() => {
     {
       label: 'Show',
       click: () => {
+        contextMenu.closePopup();
         mainWindow.show();
       }
     },
@@ -100,8 +90,6 @@ app.whenReady().then(() => {
   if(!ret) {
     console.log("registration failed");
   }
-
-  // console.log(globalShortcut.isRegistered('CommandOrControl+Shift+X'));
 });
 
 // Hide capture window on escape pressed when focused
@@ -112,7 +100,6 @@ ipcMain.on('capture-escape-pressed', (event, arg) => {
 
 // Start capture selection on mouse down in capture window
 ipcMain.on('capture-mouse-down', (event, arg) => {
-  // console.log("start capture");
   startCapture = screen.getCursorScreenPoint();
 });
 
@@ -179,22 +166,18 @@ ipcMain.on('main-close', (event, arg) => {
   mainWindow.hide();
 });
 
-app.on("window-all-closed", () => {
-  // app.quit();
-});
-
 app.on("activate", () => {
   mainWindow.show();
-});
-
-app.on('will-quit', () => {
-  // Unregister a shortcut.
-  globalShortcut.unregister('CommandOrControl+Shift+X');
 });
 
 app.on('before-quit', () => {
   // Remove ipcMain listeners
   ipcMain.removeAllListeners();
 
-  app.quitting = true;
+  // Unregister shortcut
+  globalShortcut.unregister('CommandOrControl+Shift+X');
+
+  // Set windows to null
+  mainWindow = null;
+  captureWindow = null;
 });

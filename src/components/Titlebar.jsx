@@ -4,17 +4,14 @@ import logo from "../assets/logo.ico";
 const Titlebar = () => {
 
   const handleClose = () => {
-    console.log("closing");
     window.ipcRender.send("main-close", "close");
   };
 
   const handleMinimize = () => {
-    console.log("minimizing");
     window.ipcRender.send("main-minimize", "minimize");
   };
 
   const handleMaximize = () => {
-    console.log("maximizing");
     window.ipcRender.send("main-maximize", "maximize");
   };
 
