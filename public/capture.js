@@ -19,8 +19,8 @@ const createCaptureWindow = () => {
     resizable: false,
     frame: false, 
     // opacity: 0.01,
-    alwaysOnTop: true, // SET TO TRUE LATER
-    skipTaskbar: true, // SET TO TRUE LATER
+    alwaysOnTop: true,
+    skipTaskbar: true,
     movable: false,
     fullscreen: true,
     transparent: true,

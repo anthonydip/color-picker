@@ -1,29 +1,69 @@
-# Electron + React Boilerplate
+# Color Picker
 
-This project was bootstrapped with 
-- [Create React App](https://github.com/facebook/create-react-app)
-- [Electron](https://github.com/electron/electron)
+A desktop color-picking application created using Electron and React, which\
+allows users to screenshot a section of their screen and use the built-in\
+eye-dropper tool!
 
-## Changes To Make
+<p align="center">
+ <img src="color-picker.png">
+</p>
 
-In the package.json file:
+## Usage
 
-- Change the `author` to your name
-- Change the `description` to your description of the application
-- Change the `appId` to your application ID
+After the application has started, it should show up in the tray icons.
 
-## Available Scripts
+<p align="center">
+ <img src="tray-icon.png">
+</p>
 
-In the project directory, you can run:
+The application registers a global shortcut: **CTRL + SHIFT + X**,\
+which is used to start the screenshot and cropping tool.
 
-### `npm start`
+### Screenshotting and Cropping
 
-Runs the app in the development mode.\
-The Electron application will automatically open on start-up.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The screenshot and cropping tool can be accessed by three ways:
 
-The page/application will reload when you make changes.\
-You may also see any lint errors in the console.
+<p align="center">
+ <img src="tray-menu.png">
+</p>
+
+1. Using the global shortcut: **CTRL + SHIFT + X**
+2. Left-clicking the tray icon
+3. Right-clicking the tray icon and clicking **Capture Image**
+
+Begin screenshotting by holding left-click at the desired start point of the image\
+on the screen, dragging the mouse to the end point of the image and releasing left-click.
+
+The selected screenshot will then be sent to the main color picking window,\
+and will also be **copied into clipboard** for pasting and sharing in other\
+applications.
+
+### Picking Colors
+The color picking tool can be accessed by:
+
+Right-clicking the tray icon and clicking **Show** in the context menu.
+
+The screenshotted image will be displayed in the main color picking window,\
+where hovering the cursor over the image will begin the eye-dropping tool.
+
+The **Colors** section below the image will show both the currently hovered color\
+the cursor is on, along with the current selected color.
+
+A color can be selected by left-clicking the pixel on the image where the desired color is.
+
+<p align="center">
+ <img src="copied-to-clipboard.png">
+</p>
+
+Both the **HEX** value and **RGB** value will be displayed upon selecting a color,\
+and can be copied into the clipboard by clicking the icon to the right of either.
+
+## Dev Installation
+
+1. Run `npm install` to install project dependencies
+2. Run `npm start` to start up the application
+
+## Distribution
 
 ### `npm run build`
 
