@@ -87,7 +87,7 @@ app.whenReady().then(() => {
   });
 
   if(!ret) {
-    console.log("registration failed");
+    // console.log("registration failed");
   }
 });
 

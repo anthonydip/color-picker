@@ -7,7 +7,6 @@ import Alert from './components/Alert';
 
 const App = () => {
   const [image, setImage] = useState(null);
-  // const [dimensions, setDimensions] = useState(null);
   const [hoverColor, setHoverColor] = useState("#ffffff");
   const [selectedColor, setSelectedColor] = useState("#ffffff");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -24,11 +23,6 @@ const App = () => {
     window.addEventListener("beforeunload", (event) => {
       window.ipcRender.removeAllListeners('capture-image');
     });
-
-    // Receive capture dimensions from main process
-    // window.ipcRender.receive('capture-dimensions', (data) => {
-    //   setDimensions(data);
-    // });
   }, []);
 
   const copyHexToClipboard = () => {
